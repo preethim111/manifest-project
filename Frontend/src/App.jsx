@@ -10,6 +10,8 @@ import BoardPage from './BoardPage';
 // import ForgotPassword from './ForgotPassword'
 import ResetPassword from './ResetPassword';
 import AllBoards from './AllBoards';
+import { ImageProvider } from './ImageContext';
+import { BoardsProvider } from './BoardsContext';
 
 
 
@@ -17,16 +19,20 @@ function App() {
 
   return (
     <HeaderProvider>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/create-account" element= {<CreateAccount />} />
-        <Route path="/home-page" element={<HomePage />} />
-        <Route path="/create-board" element={<CreateBoard/>} />
-        <Route path="/:title" element={<BoardPage />} />
-        {/* <Route path="/forgot-password" element={<ForgotPassword />}/> */}
-        <Route path="/reset-password" element={<ResetPassword />}/>
-        <Route path="/all-boards" element={<AllBoards />} />
-      </Routes>
+      <BoardsProvider>
+        <ImageProvider>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/create-account" element= {<CreateAccount />} />
+            <Route path="/home-page" element={<HomePage />} />
+            <Route path="/create-board" element={<CreateBoard/>} />
+            <Route path="/:title" element={<BoardPage />} />
+            {/* <Route path="/forgot-password" element={<ForgotPassword />}/> */}
+            <Route path="/reset-password" element={<ResetPassword />}/>
+            <Route path="/all-boards" element={<AllBoards />} />
+          </Routes>
+        </ImageProvider>
+      </BoardsProvider>
     </HeaderProvider>
   )
 }

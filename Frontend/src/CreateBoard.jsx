@@ -5,6 +5,8 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import FileUploadArea from './FileUpload';
 import { useNavigate } from 'react-router-dom'; 
+import { BoardsContext } from './BoardsContext';
+import { useImageContext } from './ImageContext';
 
 
 function CreateBoard() {
@@ -13,12 +15,18 @@ function CreateBoard() {
     const [thumbnail, setThumbnail] = useState(null);
     const [description, setDescription] = useState('');
     const navigate = useNavigate()
-    const [isClicked, setIsClicked] = useState(false)
+    const { addBoard } = useContext(BoardsContext)
+    const { previewImage } = useImageContext();
+    // const [isClicked, setIsClicked] = useState(false)
 
     const handleCreateClick = () => {
         if (title) {
-            navigate(`/${title}`);
-            setIsClicked(true)
+            const newBoard = { title, previewImage, description }
+            addBoard(newBoard)
+            navigate(`/all-boards`, {
+                state: {title, thumbnail}
+            });
+            // setIsClicked(true)
         } else {
             alert('Please provide a title for you board')
         }

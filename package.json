@@ -4,6 +4,8 @@
     "@emotion/styled": "^11.14.0"
   },
   "scripts": {
-    "build": "vite build"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   }
 }

@@ -76,7 +76,7 @@ function Header() {
     },
     params: {
       query: query,
-      per_page: 5,
+      per_page: 20,
     }
 
   };
@@ -112,7 +112,7 @@ function Header() {
     },
     params: {
       query: query,
-      per_page: 5
+      per_page: 40
     }
   }
   
