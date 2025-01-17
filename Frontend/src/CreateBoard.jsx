@@ -7,6 +7,8 @@ import FileUploadArea from './FileUpload';
 import { useNavigate } from 'react-router-dom'; 
 import { BoardsContext } from './BoardsContext';
 import { useImageContext } from './ImageContext';
+// import firebase from 'firebase/app';
+// import 'firebase/auth';
 
 
 function CreateBoard() {
@@ -19,7 +21,8 @@ function CreateBoard() {
     const { previewImage } = useImageContext();
     // const [isClicked, setIsClicked] = useState(false)
 
-    const handleCreateClick = () => {
+
+    const handleCreateClick = async () => {
         if (title) {
             const newBoard = { title, previewImage, description }
             addBoard(newBoard)
@@ -30,6 +33,31 @@ function CreateBoard() {
         } else {
             alert('Please provide a title for you board')
         }
+
+
+        try {
+            // const token = await firebase.auth().currentUser.getIdToken();
+
+            const response = await fetch('http://localhost:3000/api/visionBoard', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                    // 'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ title, description })
+            })
+
+            if(!response.ok) {
+                alert('Failed to create board!')
+            }
+
+            const data = await response.json()
+            console.log('Success:', data);
+        } catch (error) {
+            console.log(error.message)
+        }
+
+
     }
 
     return (

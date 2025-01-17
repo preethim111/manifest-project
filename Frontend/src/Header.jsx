@@ -25,7 +25,7 @@ function Header() {
   const [pexelsPhotos, setPexelsPhotos] = useState([]);
   const [loadedData, setLoadedData] = useState([])
   const [loading, setLoading] = useState(false)
-  // const [currentPage, setCurrentPage] = useState(1);
+  const [page, setPage] = useState(1);
 
   // Context values
   const {
@@ -76,66 +76,85 @@ function Header() {
     },
     params: {
       query: query,
-      per_page: 20,
+      per_page: 15,
+      page
     }
 
   };
 
+  useEffect(() => {
+    let ignore = false;
+    handleUnsplashImageSearch();
 
-  const handleUnsplashImageSearch = async () => {
-    try {
-      const response = await axios.get(
-        'https://api.unsplash.com/search/photos',
-        unsplashConfig
-        
-      )
-      setPhotos(response.data.results)
-      console.log(photos)
-    } catch (error) {
-      console.log(error.message)
+    return () => {
+      ignore = true;
+    };
+  }, [page])
+
+
+    const handleUnsplashImageSearch = async () => {
+      try {
+        const response = await axios.get(
+          'https://api.unsplash.com/search/photos',
+          unsplashConfig
+          
+        )
+        setPhotos((prevPhotos) => [...prevPhotos, ...response.data.results])
+        console.log(photos)
+      } catch (error) {
+        console.log(error.message)
+      }
     }
+  
+
+
+  const handleNext = () => {
+      setPage(page + 1)
+    
   }
 
     const handleKeyDown = (event) => {
         if (event.key === "Enter") {
           event.preventDefault();
+          setPhotos([])
           handleUnsplashImageSearch();
-          handlePexelsImageSearch();
+          // handlePexelsImageSearch();
           // fetchImages();
 
       };
     }
   
-  const pexelsConfig = {
-    headers: {
-      'Authorization': 'RQnBtW9fGN1eXPMKAfIYko15tJqTpfd7G1w8Evef3Y4EQAE1vFPieo5L'
-    },
-    params: {
-      query: query,
-      per_page: 40
-    }
-  }
+  // const pexelsConfig = {
+  //   headers: {
+  //     'Authorization': 'RQnBtW9fGN1eXPMKAfIYko15tJqTpfd7G1w8Evef3Y4EQAE1vFPieo5L'
+  //   },
+  //   params: {
+  //     query: query,
+  //     per_page: 40
+  //   }
+  // }
   
   
   
-  const handlePexelsImageSearch = async () => {
-    try {
-      const response = await axios.get(
-        'https://api.pexels.com/v1/search',
-        pexelsConfig
-      )
-      setPexelsPhotos(response.data.photos) 
-      console.log(response.data.photos)
-    } catch (error) {
-      console.log(error.message)
-    }
-  }
+  // const handlePexelsImageSearch = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       'https://api.pexels.com/v1/search',
+  //       pexelsConfig
+  //     )
+  //     setPexelsPhotos(response.data.photos) 
+  //     console.log(response.data.photos)
+  //   } catch (error) {
+  //     console.log(error.message)
+  //   }
+  // }
 
   
 
 
       
     return (
+      <>
       <div
         style={{
           backgroundColor: "#F7F7F5",
@@ -148,7 +167,7 @@ function Header() {
           left: "0",
           display: "flex",
           flexDirection: "column",
-          height: "95px", // Adjust this to limit the height
+          height: "95px",
         }}
       >
         {/* Header Section */}
@@ -279,8 +298,16 @@ function Header() {
             </MenuItem>
           </Menu>
         </div>
+        
+
+        
+
+
+
+
 
         {/* Image Grid Section */}
+        
         <div
           style={{
             display: "grid",
@@ -288,9 +315,12 @@ function Header() {
             gap: "16px",
             padding: "20px",
             marginTop: "20px",
+            flexDirection: "column",
+            position: "relative",
+            
           }}
         >
-          {photos.map((photo) => (
+          {photos && photos.map((photo) => (
             <div
               key={photo.id}
               style={{
@@ -335,12 +365,16 @@ function Header() {
               />
             </div>
           ))}  
-
-
+          
         </div>
+        {location.pathname === '/home-page' && (
+          <Button onClick={handleNext}>Load Next Page</Button>
+        )}
+       
 
+       </div>
 
-      </div>
+</>
     );
 
 }

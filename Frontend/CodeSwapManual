@@ -7,12 +7,13 @@ Welcome to the Manifest Challenge! Complete the challenges stated below. Good lu
 - **Key Technologies:** React, Node.js, Express, MongoDB
 
 ## Objectives 
-- Improve a feature and fix an issue.
+- Fix issues.
 
 ## Tasks 
-1. **Add some form of pagination to the images**
-- When a user enters a key word for example, New York, the app should display only 15 images relating to New York at a time from each API before pagination hits and then the next 10 and so on. But the total output should be of 60 images (30 images from Unsplash API and 30 images from Pexels API). So in essence, there should be 4 hits to the endpoints since there is a total of 60 images / 15 images.
-- Keep in mind that the API limit is 50 calls per hour and 200 calls per hour for Unsplash and Pexels, respectively. 
+1. **Add the previewImage to my backend**
+- When a user creates a vision board, they give a title, description, and a thumbnail/preview image. When they hit the "Create" Button, these three 
+attributes should be stored in the boards database. I have already started the board schema in boardModel.js and have saved the title and description
+but not the image. Please finish the code to succesfully save all three attributes of the board in the database. 
 
 2. **Debug Firebase Issue**
 - I have already implemented Firebase authentication for user sign-in and sign-up. However, everytime a push my code to Github, I get an email with this error: Deploy to Firebase Hosting on merge: All jobs have failed.
@@ -20,4 +21,3 @@ Welcome to the Manifest Challenge! Complete the challenges stated below. Good lu
 
 ## Important Notes
 - APIs: Unsplash API and Pexels API 
-- 

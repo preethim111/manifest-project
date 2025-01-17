@@ -12,6 +12,7 @@ import FileUploadArea from "./FileUpload";
 import { useImageContext } from "./ImageContext";
 import { useContext } from "react";
 import { BoardsContext } from "./BoardsContext";
+import { useNavigate } from 'react-router-dom'; 
 
 
 
@@ -21,7 +22,8 @@ function AllBoards() {
     const [fullNameDisplay, setFullNameDisplay] = useState('');
     const { previewImage } = useImageContext();
     const { boards } = useContext(BoardsContext)
-    
+    const navigate = useNavigate();
+   
 
     useEffect(() => {
         const user = auth.currentUser;
@@ -53,7 +55,7 @@ function AllBoards() {
                         textAlign: 'center',
                     }}>
                         <Card sx={{ maxWidth: 345 }}>
-                            <CardActionArea>
+                            <CardActionArea onClick={() => navigate(`/${board.title}`)}>
                                 <CardMedia
                                 component="img"
                                 height="140"

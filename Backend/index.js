@@ -5,6 +5,9 @@ import User from './model/userModel.js';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
 import bodyParser from 'body-parser';
+import Board from './model/boardModel.js';
+// import firebaseAdmin from './config/firebase'; 
+// import admin from './config/firebase';
 
 const app = express();
 
@@ -13,6 +16,8 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed HTTP methods
     allowedHeaders: ['Content-Type'], // Specify allowed headers
   }));
+
+app.use(express.json({ limit: '10mb' })); // Adjust the limit as needed
 
 dotenv.config();
 
@@ -86,9 +91,91 @@ app.post('/api/reset', async (req, res) => {
     }
 })
 
+
+// POST: Endpoint to save the vision boards (not pictures, just the boards)
+app.post('/api/visionBoard', async (req, res) => {
+    const { title, description } = req.body;
+
+    // const token = req.headers.authorization?.split(' ')[1]; // Extract token
+
+    // if (!token) {
+    //     return res.status(403).json({ message: 'No token provided' });
+    // }
+
+    try {
+        // const decoded = await admin.auth().verifyIdToken(token);
+        // const userId = decoded.uid;
+
+        const board = new Board({
+            title,
+            description,
+            // user: userId
+            // previewImage
+        })
+
+        await board.save()
+
+        res.status(201).json({
+            message: 'Board created successfully!',
+            board
+        });
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ message: "Error creating the board" })
+    }
+})
+
+
+
+// GET: Get all boards
+app.get('/api/getboards', async (req, res) => {
+    try {
+        const boards = await Board.find()
+        res.json({ boards })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: 'Failed to fetch boards' });
+    }
+})
+
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
 });
+
+
+// POST: Endpoint to save the vision boards (not pictures, just the boards)
+// app.post('/api/visionBoard', async (req, res) => {
+//     const { title, description } = req.body;
+//     const token = req.headers.authorization?.split(' ')[1]; // Extract token
+
+//     if (!token) {
+//         return res.status(403).json({ message: 'No token provided' });
+//     }
+
+//     try {
+//         // Verify the token and extract user data
+//         const decoded = await admin.auth().verifyIdToken(token); // You will need to implement the Firebase Admin SDK initialization
+//         const userId = decoded.uid; // Get the user ID from the decoded token
+
+//         // Create a new vision board and associate it with the user
+//         const board = new Board({
+//             title,
+//             description,
+//             user: userId  // Save the user ID to associate the board with the user
+//         });
+
+//         await board.save();
+
+//         res.status(201).json({
+//             message: 'Board created successfully!',
+//             board
+//         });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: "Error creating the board" });
+//     }
+// });
 
