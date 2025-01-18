@@ -27,3 +27,4 @@ jobs:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MANIFEST_8A55F }}
           projectId: manifest-8a55f
+          entryPoint: ./Frontend
