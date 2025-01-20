@@ -108,7 +108,7 @@ app.post(
 	"/api/visionBoard",
 	upload.single("uploadedPreviewImage"),
 	async (req, res) => {
-		const { title, description } = req.body;
+		const { title, description, userId } = req.body;
 		// Create the full URL path for the image
 		const previewImage = req.file ? `/uploads/${req.file.filename}` : null;
 
@@ -125,7 +125,7 @@ app.post(
 			const board = new Board({
 				title,
 				description,
-				// user: userId
+				userId,
 				previewImage,
 			});
 
