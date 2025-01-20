@@ -7,6 +7,7 @@ import FileUploadArea from "./FileUpload";
 import { useNavigate } from "react-router-dom";
 import { BoardsContext } from "./BoardsContext";
 import { useImageContext } from "./ImageContext";
+import { getAuth } from "firebase/auth";
 // import firebase from 'firebase/app';
 // import 'firebase/auth';
 
@@ -36,6 +37,8 @@ function CreateBoard() {
 
 		try {
 			// Convert base64 to File object
+			const auth = getAuth();
+			const userId = auth.currentUser.uid;
 			const base64Response = await fetch(previewImage);
 			const blob = await base64Response.blob();
 			const file = new File([blob], "preview.jpg", { type: "image/jpeg" });
@@ -45,6 +48,7 @@ function CreateBoard() {
 			formData.append("title", title);
 			formData.append("description", description);
 			formData.append("uploadedPreviewImage", file);
+			formData.append("userId", userId);
 
 			const response = await fetch("http://localhost:3000/api/visionBoard", {
 				method: "POST",
@@ -58,7 +62,7 @@ function CreateBoard() {
 			const data = await response.json();
 			console.log("Success:", data);
 		} catch (error) {
-			console.log(error.message);
+			console.error(error.message);
 		}
 	};
 
