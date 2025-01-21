@@ -11,10 +11,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: npm run build
+      - name: Install Frontend dependencies
+        working-directory: ./Frontend
+        run: npm ci
+      - name: Build Frontend
+        working-directory: ./Frontend
+        run: npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MANIFEST_8A55F }}
           channelId: live
           projectId: manifest-8a55f
+          entryPoint: ./Frontend
