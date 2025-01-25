@@ -7,6 +7,8 @@ import bcrypt from "bcrypt";
 import bodyParser from "body-parser";
 import Board from "./model/boardModel.js";
 import multer from "multer";
+import mongoose from 'mongoose';
+
 // import admin from './config/firebase';
 
 const app = express();
