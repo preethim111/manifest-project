@@ -75,12 +75,12 @@ function Login() {
     return (
 
         <>
-      <div style={{ fontSize: '40px', fontFamily: 'Lausanne', color: '#000000', paddingRight: '527px', marginBottom: '40px', fontWeight: 'bold' }}>
+       <div style={{ fontSize: '2.5rem', fontFamily: 'Lausanne', color: '#000000', marginBottom: '20px', fontWeight: 'bold', display: 'flex', justifyContent: 'flex-start'}}>
         Welcome!
       </div>
       <Box
       component="form"
-      sx={{ '& > :not(style)': { m: 1, width: '690px' } }}
+      sx={{ display: 'flex', flexDirection: 'column',justifyContent: 'flex-start', '& > :not(style)': { m: 1, width: '100%' } }}
       noValidate
       autoComplete="off"
     >
@@ -91,39 +91,38 @@ function Login() {
             '& .MuiInputLabel-root': { fontFamily: 'Lausanne' }, 
             '& .MuiInputBase-root': { fontFamily: 'Lausanne' },
           }} onChange={(e) => setEmail(e.target.value)}/>
-
       <TextField id="outlined-password-input" label="Password" variant="outlined" type="password" sx={{
             boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)', 
             borderRadius: '4px',
             fontFamily: 'Lausanne',
-            '& .MuiInputLabel-root': { fontFamily: 'Lausanne' }, 
-            '& .MuiInputBase-root': { fontFamily: 'Lausanne' }, 
+            '& .MuiInputLabel-root': { fontFamily: 'Lausanne' },
+            '& .MuiInputBase-root': { fontFamily: 'Lausanne' },
           }} onChange={(e) => setPassword(e.target.value)}/>
     </Box>
 
-    <div style={{ fontSize: '16px', fontFamily: 'Lausanne', color: '#000000' }}>
+    <div style={{ fontSize: '1rem', fontFamily: 'Lausanne', color: '#000000' }}>
       or
     </div>
 
     
-    <Button variant="outlined" sx={{ width: '691px', height: '57px', color: '#000000', borderColor: '#000000', marginTop: 2 }}>
+    <Button variant="outlined" sx={{ width: '100%', padding: '1rem', color: '#000000', borderColor: '#000000', marginTop: '1rem' }}>
       <img
             src={GoogleIcon}
             alt="Google Icon"
-            style={{ width: '24px', height: '24px', marginRight: '10px' }} 
+            style={{ width: '1rem', height: '1rem', marginRight: '1rem' }} 
           />
-        Sign in with Google
+        Sign up with Google
     </Button>
 
-    <div style={{ fontSize: '14px', fontFamily: 'Lausanne', color: '#000000', fontWeight: 'bold', marginTop: '28px', marginRight:'575px', marginBottom: '20px'}}>
+    <div style={{ fontSize: '1rem', fontFamily: 'Lausanne', color: '#000000', fontWeight: 'bold', marginTop: '1.5rem', marginBottom: '1rem', display: 'flex', justifyContent: 'flex-start'}}>
         <Button style={{ color: '#000000', textTransform: 'none', fontFamily: 'Lausanne', fontWeight: 'bold', }} 
     disableRipple onClick={() => navigate('/reset-password')}>
           Forgot Password?
         </Button>
     </div>
 
-    <div>
-      <Button variant="contained" sx={{ width: '160px', height: '54px', color: '#FFFFFF', borderColor: '#000000', backgroundColor: '#481883', marginRight: '369px',}}
+    <div style={{display: 'flex', justifyContent: 'flex-start'}}>
+      <Button variant="contained" sx={{ width: '160px', color: '#FFFFFF', borderColor: '#000000', backgroundColor: '#481883', marginRight: '369px',}}
       onClick={() => handleEmailPasswordSignIn(email, password)}
       >
         Sign in

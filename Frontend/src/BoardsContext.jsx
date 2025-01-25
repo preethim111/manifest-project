@@ -9,7 +9,6 @@ export const BoardsProvider = ({ children }) => {
         setBoards((prevBoards) => [...prevBoards, board])
     }
 
-    // New
     useEffect(() => {
         const fetchBoards = async () => {
           const response = await fetch('http://localhost:3000/api/getboards', {

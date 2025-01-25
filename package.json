@@ -1,13 +1,9 @@
 {
-	"dependencies": {
-		"@emotion/react": "^11.14.0",
-		"@emotion/styled": "^11.14.0"
-	},
-	"scripts": {
-		"dev": "concurrently \"cd Backend && npm run start\" \"cd Frontend && npm run dev\"",
-		"build": "cd Frontend && npm run build"
-	},
-	"devDependencies": {
-		"concurrently": "^9.1.2"
-	}
+  "scripts": {
+    "dev": "concurrently \"cd Backend && npm run start\" \"cd Frontend && npm run dev\"",
+    "build": "cd Frontend && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
 }

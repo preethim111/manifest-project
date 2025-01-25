@@ -16,7 +16,7 @@ function CreateBoard() {
 
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
-
+	const [counter, setCounter] = useState(0);
 	const navigate = useNavigate();
 	const { addBoard } = useContext(BoardsContext);
 	const { previewImage } = useImageContext();
@@ -24,15 +24,8 @@ function CreateBoard() {
 	// const [isClicked, setIsClicked] = useState(false)
 
 	const handleCreateClick = async () => {
-		if (title) {
-			const newBoard = { title, previewImage, description };
-			addBoard(newBoard);
-			navigate(`/all-boards`, {
-				state: { title, thumbnail },
-			});
-			// setIsClicked(true)
-		} else {
-			alert("Please provide a title for you board");
+		if (!title) {
+			alert("Please provide a title for your board");
 		}
 
 		try {
@@ -61,9 +54,21 @@ function CreateBoard() {
 
 			const data = await response.json();
 			console.log("Success:", data);
+			setCounter(counter+1)
+			const newBoard = {
+				title: data.title, 
+				previewImage: data.previewImage,
+				description: data.description,
+			};
+			addBoard(newBoard);
+			navigate(`/all-boards`, {
+				state: { title, thumbnail: data.previewImage },
+			});
+			
 		} catch (error) {
 			console.error(error.message);
 		}
+		
 	};
 
 	return (
@@ -71,7 +76,7 @@ function CreateBoard() {
 			<Header />
 			<div
 				style={{
-					fontSize: "40px",
+					fontSize: "5vh",
 					fontFamily: "Lausanne",
 					color: "#000000",
 					paddingRight: "527px",
@@ -86,15 +91,14 @@ function CreateBoard() {
 				<div
 					style={{
 						flex: "0 0 300px",
-						marginRight: "60px",
-						marginLeft: "146px",
+						marginLeft: "0.5rem",
 					}}
 				>
 					<FileUploadArea onUpload={setThumbnail} />
 				</div>
 
-				<div style={{ flex: "1" }}>
-					<div style={{ marginBottom: "20px" }}>
+				<div style={{ display: "flex", flex: "1", flexDirection: "column" }}>
+					<div style={{ marginBottom: "1.5rem" }}>
 						<TextField
 							id="title"
 							label="Title"
@@ -107,10 +111,16 @@ function CreateBoard() {
 									fontFamily: "Lausanne",
 									borderWidth: "40px",
 									boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-									width: "600px",
+									width: "100%",
 								},
 							}}
 							sx={{
+								width: {
+									xs: "100%", // Full width on small screens
+									sm: "80%",  // 80% of the container on small to medium screens
+									md: "60%",  // 60% of the container on medium screens
+									lg: "50%",  // 50% of the container on large screens
+								  },
 								"& .MuiInputLabel-root": {
 									fontFamily: "Lausanne",
 									fontWeight: "bold",
@@ -133,10 +143,16 @@ function CreateBoard() {
 									fontFamily: "Lausanne",
 									borderWidth: "40px",
 									boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-									width: "600px",
+									width: "100%",
 								},
 							}}
 							sx={{
+								width: {
+									xs: "100%", // Full width on small screens
+									sm: "80%",  // 80% of the container on small to medium screens
+									md: "60%",  // 60% of the container on medium screens
+									lg: "50%",  // 50% of the container on large screens
+								  },
 								"& .MuiInputLabel-root": {
 									fontFamily: "Lausanne",
 									fontWeight: "bold",
@@ -147,12 +163,12 @@ function CreateBoard() {
 				</div>
 			</div>
 
-			<div style={{ marginTop: "50px", position: "relative", left: "-358px" }}>
+			<div style={{ marginTop: "2.5rem", position: "relative",  display: 'flex', justifyContent: 'flex-start',}}>
 				<Button
 					variant="contained"
 					sx={{
-						width: "150px",
-						height: "54px",
+						width: "18%",
+						padding: "1rem",
 						color: "#FFFFFF",
 						borderColor: "#000000",
 						backgroundColor: "#481883",

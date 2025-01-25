@@ -11,9 +11,15 @@ import { Menu, MenuItem } from "@mui/material";
 import { BrowserRouter as Router, useNavigate } from "react-router-dom";
 import { HeaderContext } from "./HeaderContext";
 import axios from 'axios';
-// import ImageGallery from "./ImageGallery";
+import Backdrop from '@mui/material/Backdrop';
+import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
+import Typography from '@mui/material/Typography';
+
+
 
 function Header() {
+
   //accept the query variable here
   const navigate = useNavigate();
 
@@ -23,9 +29,17 @@ function Header() {
   const [query, setQuery] = useState("");
   const [photos, setPhotos] = useState([]);
   const [pexelsPhotos, setPexelsPhotos] = useState([]);
-  const [loadedData, setLoadedData] = useState([])
-  const [loading, setLoading] = useState(false)
   const [page, setPage] = useState(1);
+  const [counter, setCounter] = useState(0);
+  const [boards, setBoards] = useState([]);
+  const [open, setOpen] = React.useState(false);
+
+  const [selectedBoard, setSelectedBoard] = useState('');
+  
+
+  const handleOpen = () => setOpen(true);
+  const handleClose2 = () => setOpen(false);
+  
 
   // Context values
   const {
@@ -72,7 +86,7 @@ function Header() {
 
   const unsplashConfig = {
     headers: {
-      'Authorization': 'Client-ID QMm0cFjUe4-_ul5-M4hY2FqCWf2OcYKkcWTu7F0BLsM',
+      'Authorization': `Client-ID ${import.meta.env.VITE_UNSPLASH_API_KEY}`,
     },
     params: {
       query: query,
@@ -82,34 +96,48 @@ function Header() {
 
   };
 
-  useEffect(() => {
-    let ignore = false;
-    handleUnsplashImageSearch();
+  // useEffect(() => {
+  //   let ignore = false;
+  //   handleUnsplashImageSearch();
 
-    return () => {
-      ignore = true;
-    };
-  }, [page])
+  //   return () => {
+  //     ignore = true;
+  //   };
+  // }, [page])
 
 
     const handleUnsplashImageSearch = async () => {
       try {
-        const response = await axios.get(
-          'https://api.unsplash.com/search/photos',
-          unsplashConfig
-          
-        )
-        setPhotos((prevPhotos) => [...prevPhotos, ...response.data.results])
-        console.log(photos)
+        if (counter < 3) {
+            const response = await axios.get(
+              'https://api.unsplash.com/search/photos',
+              unsplashConfig
+              
+            )
+            setPhotos((prevPhotos) => [...prevPhotos, ...response.data.results])
+            console.log(photos)
+        } else if (counter < 6) {
+            const response = await axios.get(
+              'https://api.pexels.com/v1/search',
+              pexelsConfig
+            )
+            setPexelsPhotos(response.data.photos) 
+            console.log(response.data.photos)
+        } 
+        
       } catch (error) {
         console.log(error.message)
       }
     }
   
-
+  useEffect(() => {
+    handleUnsplashImageSearch();
+  }, [page, counter])
 
   const handleNext = () => {
       setPage(page + 1)
+      // handleUnsplashImageSearch();
+      setCounter(counter + 1)
     
   }
 
@@ -118,39 +146,48 @@ function Header() {
           event.preventDefault();
           setPhotos([])
           handleUnsplashImageSearch();
-          // handlePexelsImageSearch();
-          // fetchImages();
-
+          setCounter(counter + 1)
       };
     }
   
-  // const pexelsConfig = {
-  //   headers: {
-  //     'Authorization': 'RQnBtW9fGN1eXPMKAfIYko15tJqTpfd7G1w8Evef3Y4EQAE1vFPieo5L'
-  //   },
-  //   params: {
-  //     query: query,
-  //     per_page: 40
-  //   }
-  // }
+  const pexelsConfig = {
+    headers: {
+      'Authorization': `${import.meta.env.VITE_PEXELS_API_KEY}`
+    },
+    params: {
+      query: query,
+      per_page: 40
+    }
+  }
   
-  
-  
-  // const handlePexelsImageSearch = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       'https://api.pexels.com/v1/search',
-  //       pexelsConfig
-  //     )
-  //     setPexelsPhotos(response.data.photos) 
-  //     console.log(response.data.photos)
-  //   } catch (error) {
-  //     console.log(error.message)
-  //   }
-  // }
+  const fetchBoards = async () => {
+    const response = await fetch('http://localhost:3000/api/getboards', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    const data = await response.json();
+    console.log('Fetched data:', data); 
+    setBoards(data.boards); 
+  }
 
-  
+  const handleImageSelect = async () => {
+    fetchBoards();
+    // setOpen(true);
+  } 
 
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
 
       
     return (
@@ -308,7 +345,7 @@ function Header() {
 
         {/* Image Grid Section */}
         
-        <div
+         <div
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
@@ -323,6 +360,10 @@ function Header() {
           {photos && photos.map((photo) => (
             <div
               key={photo.id}
+              onClick={() => {
+                handleOpen();
+                handleImageSelect();
+              }}
               style={{
                 width: "100%",
                 borderRadius: "10px",
@@ -346,6 +387,10 @@ function Header() {
       {pexelsPhotos.map((photo) => (
             <div
               key={photo.id}
+              onClick={() => {
+                handleOpen();
+                handleImageSelect();
+              }}
               style={{
                 width: "100%",
                 borderRadius: "10px",
@@ -367,11 +412,60 @@ function Header() {
           ))}  
           
         </div>
-        {location.pathname === '/home-page' && (
+
+        {location.pathname === '/home-page' && counter >= 1 && (
           <Button onClick={handleNext}>Load Next Page</Button>
-        )}
+        )} 
        
 
+       <Modal
+        open={open}
+        onClose={handleClose2}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h7" component="h2" color="#000000">
+              Select vision board you want image added to: 
+            </Typography>
+           
+
+            <Typography
+            id="modal-modal-description"
+            sx={{ mt: 2 }}
+            color="#000000"
+            >
+  
+            <div 
+              style={{
+                display: "flex",
+                flexWrap: "wrap", 
+                gap: "1rem", 
+                justifyContent: "space-between",
+              }}
+            >
+              {boards.map((board) => (
+                <button
+                  // key={board.id} 
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    flex: "1 1 calc(50% - 1rem)",
+                    marginBottom: "1rem",
+                  }}
+                  onClick={() => {
+                    setSelectedBoard(board.title);
+                    console.log(selectedBoard)
+                  }}
+                >
+                  <div>{board.title}</div>
+                </button>
+              ))}
+            </div>
+            </Typography>
+
+          </Box>
+      </Modal>
        </div>
 
 </>

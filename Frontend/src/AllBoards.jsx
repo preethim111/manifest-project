@@ -19,8 +19,9 @@ function AllBoards() {
 	const { title, thumbnail } = location.state || {};
 	const [fullNameDisplay, setFullNameDisplay] = useState("");
 	const { previewImage } = useImageContext();
-	const { boards } = useContext(BoardsContext);
+	// const { boards } = useContext(BoardsContext);
 	const navigate = useNavigate();
+	const [boards, setBoards] = useState([]);
 
 	useEffect(() => {
 		const user = auth.currentUser;
@@ -32,35 +33,55 @@ function AllBoards() {
 		console.log(previewImage);
 	}, []);
 
+	useEffect(() => {
+        const fetchBoards = async () => {
+          const response = await fetch('http://localhost:3000/api/getboards', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+          }); 
+          const data = await response.json();
+          console.log('Fetched data:', data); 
+          setBoards(data.boards); 
+        };
+    
+        fetchBoards();
+      }, []);
+
+
+
 	return (
 		<>
 			<Header />
 			<div
 				style={{
-					fontSize: "15px",
+					fontSize: "2vh",
 					fontFamily: "Lausanne",
 					color: "#000000",
-					paddingRight: "527px",
-					marginBottom: "40px",
+					marginBottom: "2rem",
 					fontWeight: "bold",
+					marginTop: '6rem',
+					display: 'flex',
+					justifyContent: 'flex-start'
 				}}
 			>
 				{fullNameDisplay && <h1>{fullNameDisplay}'s Vision Boards</h1>}
 			</div>
 
-			<div style={{ display: "flex", flexWrap: "wrap", gap: "40px" }}>
+			<div style={{ display: "flex", flexWrap: "wrap", gap: "2.5rem" }}>
 				{boards.map((board, index) => (
 					<div
 						key={index}
 						style={{
 							border: "1px solid #ccc",
 							borderRadius: "8px",
-							padding: "16px",
-							width: "200px",
+							padding: "1rem",
+							width: "23%",
 							textAlign: "center",
 						}}
 					>
-						<Card sx={{ maxWidth: 345 }}>
+						<Card sx={{ width: '100%' }}>
 							<CardActionArea onClick={() => navigate(`/${board.title}`)}>
 								<CardMedia
 									component="img"

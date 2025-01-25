@@ -7,7 +7,6 @@ import bcrypt from "bcrypt";
 import bodyParser from "body-parser";
 import Board from "./model/boardModel.js";
 import multer from "multer";
-// import firebaseAdmin from './config/firebase';
 // import admin from './config/firebase';
 
 const app = express();
@@ -62,7 +61,7 @@ app.post("/api/authenticate", async (req, res) => {
 		}
 
 		res.status(200).send({ message: "User found" });
-	} catch (err) {
+	} catch (error) {
 		res.status(500).send({ error: error.message });
 	}
 });
@@ -111,16 +110,7 @@ app.post(
 		const { title, description, userId } = req.body;
 		// Create the full URL path for the image
 		const previewImage = req.file ? `/uploads/${req.file.filename}` : null;
-
-		// const token = req.headers.authorization?.split(' ')[1]; // Extract token
-
-		// if (!token) {
-		//     return res.status(403).json({ message: 'No token provided' });
-		// }
-
 		try {
-			// const decoded = await admin.auth().verifyIdToken(token);
-			// const userId = decoded.uid;
 
 			const board = new Board({
 				title,
@@ -153,41 +143,26 @@ app.get("/api/getboards", async (req, res) => {
 	}
 });
 
+
+
+// GET: Get specific board based on title
+app.get("/api/getSpecificBoard", async(req, res) => {
+	const { title } = req.body;
+	try {
+		const board = await Board.findOne({ title })
+	} catch (error) {
+		res.status(500).send({ error: error.message });
+	}
+})
+
+
+
+
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);
 });
 
-// POST: Endpoint to save the vision boards (not pictures, just the boards)
-// app.post('/api/visionBoard', async (req, res) => {
-//     const { title, description } = req.body;
-//     const token = req.headers.authorization?.split(' ')[1]; // Extract token
 
-//     if (!token) {
-//         return res.status(403).json({ message: 'No token provided' });
-//     }
-
-//     try {
-//         // Verify the token and extract user data
-//         const decoded = await admin.auth().verifyIdToken(token); // You will need to implement the Firebase Admin SDK initialization
-//         const userId = decoded.uid; // Get the user ID from the decoded token
-
-//         // Create a new vision board and associate it with the user
-//         const board = new Board({
-//             title,
-//             description,
-//             user: userId  // Save the user ID to associate the board with the user
-//         });
-
-//         await board.save();
-
-//         res.status(201).json({
-//             message: 'Board created successfully!',
-//             board
-//         });
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ message: "Error creating the board" });
-//     }
-// });

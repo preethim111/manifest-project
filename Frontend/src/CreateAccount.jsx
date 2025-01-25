@@ -62,12 +62,12 @@ function CreateAccount() {
     
     return (
       <>
-      <div style={{ fontSize: '40px', fontFamily: 'Lausanne', color: '#000000', paddingRight: '566px', marginBottom: '20px', fontWeight: 'bold' }}>
+      <div style={{ fontSize: '2.5rem', fontFamily: 'Lausanne', color: '#000000', paddingRight: '35rem', marginBottom: '20px', fontWeight: 'bold' }}>
         Sign up
       </div>
       <Box
       component="form"
-      sx={{ '& > :not(style)': { m: 1, width: '690px' } }}
+      sx={{ '& > :not(style)': { m: 1, width: '100%' } }}
       noValidate
       autoComplete="off"
     >
@@ -94,22 +94,25 @@ function CreateAccount() {
           }} onChange={(e) => setPassword(e.target.value)}/>
     </Box>
 
-    <div style={{ fontSize: '16px', fontFamily: 'Lausanne', color: '#000000' }}>
+    <div style={{ fontSize: '1rem', fontFamily: 'Lausanne', color: '#000000' }}>
       or
     </div>
 
 
-    <Button variant="outlined" sx={{ width: '691px', height: '57px', color: '#000000', borderColor: '#000000', marginTop: 2 }}>
+    <Button variant="outlined" sx={{ width: '100%', padding: '1rem', color: '#000000', borderColor: '#000000', marginTop: '1rem' }}>
       <img
             src={GoogleIcon}
             alt="Google Icon"
-            style={{ width: '24px', height: '24px', marginRight: '10px' }} 
+            style={{ width: '1rem', height: '1rem', marginRight: '1rem' }} 
           />
         Sign up with Google
     </Button>
 
-    <div>
-      <Button variant="contained" onClick={handleSignUp} sx={{ width: '160px', height: '54px', color: '#FFFFFF', borderColor: '#000000', marginTop: 6 , backgroundColor: '#481883', marginRight: '530px'}}>
+    <div style={{
+    display: 'flex',
+    justifyContent: 'flex-start',
+  }}>
+      <Button variant="contained" onClick={handleSignUp} sx={{ width: '20%', padding: '1rem', color: '#FFFFFF', borderColor: '#000000', marginTop: '2rem' , backgroundColor: '#481883'}}>
         Sign up
       </Button>
     </div>

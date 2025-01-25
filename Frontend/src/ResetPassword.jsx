@@ -61,13 +61,13 @@ function ResetPassword() {
 
     return (
         <>
-            <div style={{ fontSize: '40px', fontFamily: 'Lausanne', color: '#000000', fontWeight:"bold", marginBottom: '30px' }}>
+            <div style={{ fontSize: '2.5rem', fontFamily: 'Lausanne', color: '#000000', fontWeight:"bold", marginBottom: '2rem' }}>
                 Reset your password
             </div>
 
             <Box
                 component="form"
-                sx={{ '& > :not(style)': { m: 1, width: '690px' } }}
+                sx={{ '& > :not(style)': { m: 1, width: '100%' } }}
                 noValidate
                 autoComplete="off"
             >
@@ -77,15 +77,7 @@ function ResetPassword() {
                 '& .MuiOutlinedInput-root': {
                     borderRadius: '30px'
                   }, }}/>
-            </Box>
-
-            <Box
-                component="form"
-                sx={{ '& > :not(style)': { m: 1, width: '690px' } }}
-                noValidate
-                autoComplete="off"
-            >
-                <TextField id="outlined-password-input" label="Password" variant="outlined" type="password" value={newPassword}
+                  <TextField id="outlined-password-input" label="Password" variant="outlined" type="password" value={newPassword}
         onChange={(e) => setNewPassword(e.target.value)} sx={{ '& .MuiInputLabel-root': { fontFamily: 'Lausanne', fontWeight:"bolder" }, 
         '& .MuiInputBase-root': { fontFamily: 'Lausanne', fontWeight:"bolder" },  
         '& .MuiOutlinedInput-root': {
@@ -96,7 +88,7 @@ function ResetPassword() {
 
 
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '25px' }} >
-                <Button variant="contained" onClick={handleReset} sx={{ width: '400px', height: '54px', color: '#FFFFFF', borderColor: '#000000', backgroundColor: '#481883', borderRadius:'30px'}}>
+                <Button variant="contained" onClick={handleReset} sx={{ width: '70%', padding:'1rem', color: '#FFFFFF', borderColor: '#000000', backgroundColor: '#481883', borderRadius:'30px'}}>
                     Reset Password
                 </Button>
             </div>
