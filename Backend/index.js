@@ -23,7 +23,7 @@ app.use(
 
 app.use(express.json({ limit: "10mb" })); // Adjust the limit as needed
 
-mongoose.connect('mongodb+srv://pmanne:Srisairam11$@manifest-app.svp7u.mongodb.net/test?retryWrites=true&w=majority&appName=manifest-app')
+// mongoose.connect('mongodb+srv://pmanne:Srisairam11$@manifest-app.svp7u.mongodb.net/test?retryWrites=true&w=majority&appName=manifest-app')
 
 dotenv.config();
 
