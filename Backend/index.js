@@ -8,6 +8,7 @@ import bodyParser from "body-parser";
 import Board from "./model/boardModel.js";
 import multer from "multer";
 import mongoose from 'mongoose';
+import { logger, requestLogger } from "./logger.js"; 
 
 // import admin from './config/firebase';
 
@@ -42,6 +43,24 @@ const storage = multer.diskStorage({
 		cb(null, Date.now() + "-" + file.originalname);
 	},
 });
+
+app.use(requestLogger);
+
+app.use((req, res, next) => {
+	logger.info(`Incoming request: ${req.method} ${req.url}`);
+	next();
+  });
+  
+  app.get("/", (req, res) => {
+	logger.debug("Handling GET request for /");
+	res.send("Hello, Winston Logging!");
+  });
+  
+  app.use((err, req, res, next) => {
+	logger.error(`Error: ${err.message}`);
+	res.status(500).send("Something went wrong!");
+  });
+
 
 const upload = multer({ storage: storage });
 

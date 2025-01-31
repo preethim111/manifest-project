@@ -1,0 +1,14 @@
+{"level":"debug","message":"This is a debug message","timestamp":"2025-01-29T04:02:58.916Z"}
+{"level":"info","message":"This is an info message","timestamp":"2025-01-29T04:02:58.919Z"}
+{"level":"error","message":"This is an error message","timestamp":"2025-01-29T04:02:58.919Z"}
+{"level":"debug","message":"This is a debug message","timestamp":"2025-01-29T04:02:58.930Z"}
+{"level":"info","message":"This is an info message","timestamp":"2025-01-29T04:02:58.930Z"}
+{"level":"error","message":"This is an error message","timestamp":"2025-01-29T04:02:58.931Z"}
+{"level":"debug","message":"This is a debug message","timestamp":"2025-01-29T04:05:47.625Z"}
+{"level":"info","message":"This is an info message","timestamp":"2025-01-29T04:05:47.626Z"}
+{"level":"error","message":"This is an error message","timestamp":"2025-01-29T04:05:47.626Z"}
+{"level":"debug","message":"This is a debug message","timestamp":"2025-01-29T04:05:47.635Z"}
+{"level":"info","message":"This is an info message","timestamp":"2025-01-29T04:05:47.635Z"}
+{"level":"error","message":"This is an error message","timestamp":"2025-01-29T04:05:47.635Z"}
+{"level":"info","message":"Incoming request: GET /","timestamp":"2025-01-29T04:16:15.423Z"}
+{"level":"debug","message":"Handling GET request for /","timestamp":"2025-01-29T04:16:15.428Z"}
