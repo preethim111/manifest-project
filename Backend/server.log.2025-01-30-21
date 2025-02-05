@@ -1,0 +1,2 @@
+{"level":"info","message":"Incoming request: GET /api/getboards","timestamp":"2025-01-31T05:51:00.042Z"}
+{"level":"info","message":"Incoming request: POST /api/authenticate","timestamp":"2025-01-31T05:51:12.064Z"}

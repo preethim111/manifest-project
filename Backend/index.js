@@ -178,6 +178,42 @@ app.get("/api/getSpecificBoard", async(req, res) => {
 
 
 
+// POST: Post images to specific board
+app.post("/api/populateVisionBoard", async(req, res) => {
+	const {title, images} = req.body;
+
+	if (!title || !images || !Array.isArray(images)) {
+        return res.status(400).json({ message: "Invalid input: title and images are required." });
+    }
+
+    try {
+        const board = await Board.findOne({ title });
+
+        if (!board) {
+            return res.status(404).json({ message: "Board not found" });
+        }
+
+        if (!Array.isArray(board.images)) {
+            board.images = [];
+        }
+
+        console.log("Before appending images:", board.images);
+
+        const newImages = images.filter(image => !board.images.includes(image));
+        board.images.push(...newImages);
+
+        await board.save();
+
+        console.log("After appending images:", board.images);
+
+        res.status(200).json({ message: "Images successfully added to board", board });
+    } catch (error) {
+        console.error("Error in populateBoard:", error);
+        res.status(500).json({ message: "Error updating image to board" });
+    }
+})
+
+
 
 
 const PORT = process.env.PORT || 3000;

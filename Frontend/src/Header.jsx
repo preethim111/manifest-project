@@ -34,7 +34,9 @@ function Header() {
   const [boards, setBoards] = useState([]);
   const [open, setOpen] = React.useState(false);
 
+  const [title, setTitle] = useState('');
   const [selectedBoard, setSelectedBoard] = useState('');
+  const [selectedImage, setSelectedImage] = useState([]);
   
 
   const handleOpen = () => setOpen(true);
@@ -84,17 +86,17 @@ function Header() {
 
 
 
-  const unsplashConfig = {
-    headers: {
-      'Authorization': `Client-ID ${import.meta.env.VITE_UNSPLASH_API_KEY}`,
-    },
-    params: {
-      query: query,
-      per_page: 15,
-      page
-    }
+  // const unsplashConfig = {
+  //   headers: {
+  //     'Authorization': `Client-ID ${import.meta.env.VITE_UNSPLASH_API_KEY}`,
+  //   },
+  //   params: {
+  //     query: query,
+  //     per_page: 15,
+  //     page
+  //   }
 
-  };
+  // };
 
   // useEffect(() => {
   //   let ignore = false;
@@ -108,22 +110,13 @@ function Header() {
 
     const handleUnsplashImageSearch = async () => {
       try {
-        if (counter < 3) {
-            const response = await axios.get(
-              'https://api.unsplash.com/search/photos',
-              unsplashConfig
-              
-            )
-            setPhotos((prevPhotos) => [...prevPhotos, ...response.data.results])
-            console.log(photos)
-        } else if (counter < 6) {
-            const response = await axios.get(
-              'https://api.pexels.com/v1/search',
-              pexelsConfig
-            )
-            setPexelsPhotos(response.data.photos) 
-            console.log(response.data.photos)
-        } 
+        const response = await axios.get(
+          'https://api.pexels.com/v1/search',
+          pexelsConfig
+        )
+        setPexelsPhotos((prevPexelPhotos) => [...prevPexelPhotos, ...response.data.photos]) 
+        console.log(response.data.photos)
+        
         
       } catch (error) {
         console.log(error.message)
@@ -132,17 +125,17 @@ function Header() {
   
   useEffect(() => {
     handleUnsplashImageSearch();
-  }, [page, counter])
+  }, [page])
 
   const handleNext = () => {
       setPage(page + 1)
-      // handleUnsplashImageSearch();
-      setCounter(counter + 1)
+      // setCounter(counter + 1)
     
   }
 
     const handleKeyDown = (event) => {
         if (event.key === "Enter") {
+          setPage(0);
           event.preventDefault();
           setPhotos([])
           handleUnsplashImageSearch();
@@ -156,7 +149,8 @@ function Header() {
     },
     params: {
       query: query,
-      per_page: 40
+      per_page: 40,
+      page: page
     }
   }
   
@@ -172,10 +166,41 @@ function Header() {
     setBoards(data.boards); 
   }
 
-  const handleImageSelect = async () => {
+  const handleImageSelect = async (image) => {
     fetchBoards();
-    // setOpen(true);
-  } 
+    
+    if (selectedImage && !selectedImage.includes(image)) {
+      setSelectedImage(prevSelectedImages => [...prevSelectedImages, image])
+    }
+
+  }
+
+  const handleModalSelect = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/populateVisionBoard', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          title: selectedBoard, 
+          images: selectedImage
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+  
+      const result = await response.json();
+      console.log('Response from server:', result);
+    } catch (error) {
+      console.error('Error in handleModalSelect:', error);
+    }
+  };
+  
+  
 
   const style = {
     position: 'absolute',
@@ -384,12 +409,12 @@ function Header() {
             </div>
           ))}
 
-      {pexelsPhotos.map((photo) => (
+      {pexelsPhotos.map((photo, index) => (
             <div
-              key={photo.id}
+              key={photo.id || index}
               onClick={() => {
                 handleOpen();
-                handleImageSelect();
+                handleImageSelect(photo.src.original);
               }}
               style={{
                 width: "100%",
@@ -430,7 +455,7 @@ function Header() {
             </Typography>
            
 
-            <Typography
+            <div
             id="modal-modal-description"
             sx={{ mt: 2 }}
             color="#000000"
@@ -444,9 +469,9 @@ function Header() {
                 justifyContent: "space-between",
               }}
             >
-              {boards.map((board) => (
+              {boards.map((board, index) => (
                 <button
-                  // key={board.id} 
+                  key={board.id || index} 
                   style={{
                     display: "flex",
                     flexDirection: "column",
@@ -456,13 +481,14 @@ function Header() {
                   onClick={() => {
                     setSelectedBoard(board.title);
                     console.log(selectedBoard)
+                    handleModalSelect();
                   }}
                 >
                   <div>{board.title}</div>
                 </button>
               ))}
             </div>
-            </Typography>
+            </div>
 
           </Box>
       </Modal>
