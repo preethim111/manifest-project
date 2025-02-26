@@ -48,11 +48,12 @@ function CreateAccount() {
         },
         body: JSON.stringify(userData)
       })
-
+      const responseData = await response.json();
       if (!response.ok) {
-        throw new Error('Failed to save user data to the backend');
+        throw new Error(responseData.error || 'Failed to save user data to the backend');
       }
 
+      console.log(responseData);
       console.log('User created:', userData)
     } catch (err) {
       console.error('Error creating account:', err.message);

@@ -19,7 +19,7 @@ export const BoardsProvider = ({ children }) => {
           }); 
           const data = await response.json();
           console.log('Fetched data:', data); 
-          setBoards(data.boards); 
+          setBoards(Array.isArray(data.boards) ? data.boards : []); 
         };
     
         fetchBoards();

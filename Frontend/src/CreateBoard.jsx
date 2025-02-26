@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { BoardsContext } from "./BoardsContext";
 import { useImageContext } from "./ImageContext";
 import { getAuth } from "firebase/auth";
+
 // import firebase from 'firebase/app';
 // import 'firebase/auth';
 
@@ -31,10 +32,21 @@ function CreateBoard() {
 		try {
 			// Convert base64 to File object
 			const auth = getAuth();
-			const userId = auth.currentUser.uid;
+			const user = auth.currentUser;
+
+			if (!user) {
+				alert("User not authenticated.");
+				return;
+			  }
+			  const idToken = await user.getIdToken(); // Get the ID token from Firebase
+			  const userId = user.uid;
+
+
 			const base64Response = await fetch(previewImage);
 			const blob = await base64Response.blob();
 			const file = new File([blob], "preview.jpg", { type: "image/jpeg" });
+
+		
 
 			// Create FormData object
 			const formData = new FormData();
@@ -45,6 +57,9 @@ function CreateBoard() {
 
 			const response = await fetch("http://localhost:3000/api/visionBoard", {
 				method: "POST",
+				headers: {
+					Authorization: `Bearer ${idToken}`, // Pass the ID token
+				  },
 				body: formData,
 			});
 

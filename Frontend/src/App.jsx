@@ -12,6 +12,8 @@ import ResetPassword from './ResetPassword';
 import AllBoards from './AllBoards';
 import { ImageProvider } from './ImageContext';
 import { BoardsProvider } from './BoardsContext';
+import ImageGenerator from './ImageGenerator';
+import AiImages from '../AiImages';
 
 
 
@@ -30,6 +32,8 @@ function App() {
             {/* <Route path="/forgot-password" element={<ForgotPassword />}/> */}
             <Route path="/reset-password" element={<ResetPassword />}/>
             <Route path="/all-boards" element={<AllBoards />} />
+            <Route path="/ai-image-generator" element={<ImageGenerator />} />
+            <Route path="/ai-images/:title" element={<AiImages />}/>
           </Routes>
         </ImageProvider>
       </BoardsProvider>

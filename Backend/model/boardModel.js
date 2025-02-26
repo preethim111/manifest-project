@@ -5,7 +5,8 @@ const boardSchema = new mongoose.Schema({
 	description: { type: String, required: true },
 	previewImage: { type: String, required: true },
 	userId: { type: String, required: true },
-	images: { type: [String], default: [] }
+	images: { type: [String], default: [] },
+	imagesAI: {type: [String], default: []}
 });
 
 const Board = mongoose.model("Board", boardSchema);

@@ -9,8 +9,8 @@ import Board from "./model/boardModel.js";
 import multer from "multer";
 import mongoose from 'mongoose';
 import { logger, requestLogger } from "./logger.js"; 
+import admin from "firebase-admin";
 
-// import admin from './config/firebase';
 
 const app = express();
 
@@ -18,7 +18,7 @@ app.use(
 	cors({
 		origin: "http://localhost:5173", // Allow requests from your frontend's origin
 		methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed HTTP methods
-		allowedHeaders: ["Content-Type"], // Specify allowed headers
+		allowedHeaders: ["Content-Type", "Authorization"], // Specify allowed headers
 	})
 );
 
@@ -63,6 +63,12 @@ app.use((req, res, next) => {
 
 
 const upload = multer({ storage: storage });
+
+
+admin.initializeApp({
+	credential: admin.credential.applicationDefault(),  // Use applicationDefault() for local dev credentials
+  });
+
 
 // POST: Endpoint to authenticate user during sign-in
 app.post("/api/authenticate", async (req, res) => {
@@ -154,14 +160,27 @@ app.post(
 );
 
 // GET: Get all boards
-app.get("/api/getboards", async (req, res) => {
+app.get("/api/getboards/:userId", async (req, res) => {
 	try {
-		const boards = await Board.find();
-		res.json({ boards });
-	} catch (error) {
-		console.log(error);
-		res.status(500).json({ error: "Failed to fetch boards" });
-	}
+		const {userId} = req.params
+        // const idToken = req.headers.authorization?.split("Bearer ")[1];
+
+        // if (!idToken) {
+        //     return res.status(401).json({ error: "Unauthorized: No token provided" });
+        // }
+
+        // // Verify the Firebase token and extract the user's UID
+        // const decodedToken = await admin.auth().verifyIdToken(idToken);
+        // const userId = decodedToken.uid;
+		console.log("UID: ", userId);
+        // Query the database for boards owned by this user
+        const boards = await Board.find({ userId: userId });
+
+        res.json({ boards });
+    } catch (error) {
+        console.error("Error fetching boards:", error);
+        res.status(500).json({ error: "Failed to fetch boards" });
+    }
 });
 
 
@@ -213,6 +232,66 @@ app.post("/api/populateVisionBoard", async(req, res) => {
     }
 })
 
+// GET: Get images from specific board 
+app.get("/api/getImages/:title", async(req, res) => {
+	try {
+		const { title } = req.params;
+		const board = await Board.findOne({ title })
+
+		if (!board) {
+            return res.status(404).json({ error: "Board not found" });
+        }
+
+		res.json({ images: board.images })
+	} catch (error) {
+		console.error("Error fetching images:", error);
+        res.status(500).json({ error: "Failed to fetch images" });
+	}
+})
+
+
+// POST: Post AI images to specific board
+app.post("/api/populateVisionBoardAI", async(req, res) => {
+	const {title, imagesAI} = req.body;
+
+	try {
+		const board = await Board.findOne({ title })
+
+		if (!Array.isArray(board.imagesAI)) {
+            board.imagesAI = [];
+        }
+
+		const newImagesAI = imagesAI.filter(image => !board.images.includes(image));
+        board.imagesAI.push(...newImagesAI);
+
+		await board.save();
+
+		res.status(200).json({ message: "AI Images successfully added to board", board });
+
+	} catch (error) {
+		console.error("Error in populateBoardAI:", error);
+        res.status(500).json({ message: "Error updating AI image to board" });
+	}
+})
+
+
+// GET: Get AI images of specific board 
+app.get("/api/getAiImages/:title", async(req, res) => {
+	try {
+		const { title } = req.params;
+		const board = await Board.findOne({ title })
+
+		if (!board) {
+            return res.status(404).json({ error: "Board not found" });
+        }
+
+		res.json({ imagesAI: board.imagesAI })
+
+	} catch (error) {
+		console.error("Error fetching AI images:", error);
+		res.status(500).json({ error: "Failed to fetch AI" })
+	}
+})
 
 
 
@@ -221,5 +300,3 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);
 });
-
-

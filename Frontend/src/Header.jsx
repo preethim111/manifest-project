@@ -11,10 +11,10 @@ import { Menu, MenuItem } from "@mui/material";
 import { BrowserRouter as Router, useNavigate } from "react-router-dom";
 import { HeaderContext } from "./HeaderContext";
 import axios from 'axios';
-import Backdrop from '@mui/material/Backdrop';
 import Modal from '@mui/material/Modal';
-import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
+import { auth } from "./firebase";
+
 
 
 
@@ -50,7 +50,9 @@ function Header() {
     isCreateClicked,
     setIsCreateClicked,
     isVisionBoardsClicked,
-    setIsVisionBoardsClicked
+    setIsVisionBoardsClicked,
+    isImageGeneratorClicked,
+    setIsImageGeneratorClicked
   } = useContext(HeaderContext);
 
   // Handlers
@@ -58,6 +60,7 @@ function Header() {
     setIsHomeClicked(true);
     setIsCreateClicked(false);
     setIsVisionBoardsClicked(false);
+    setIsImageGeneratorClicked(false);
     navigate("/home-page");
   };
 
@@ -65,6 +68,7 @@ function Header() {
     setIsCreateClicked(true);
     setIsHomeClicked(false);
     setIsVisionBoardsClicked(false);
+    setIsImageGeneratorClicked(false);
     navigate("/create-board");
   };
 
@@ -72,6 +76,7 @@ function Header() {
     setIsVisionBoardsClicked(true);
     setIsCreateClicked(false);
     setIsHomeClicked(false);
+    setIsImageGeneratorClicked(false);
     navigate("/all-boards")
   }
 
@@ -82,36 +87,23 @@ function Header() {
 
   const handleClose = () => {
     setIsOpen(false);
+    
   };
 
+  const handleImageGeneratorClick = () => {
+    setIsImageGeneratorClicked(true);
+    setIsCreateClicked(false);
+    setIsHomeClicked(false);
+    setIsVisionBoardsClicked(false);
+    navigate("/ai-image-generator")
+
+  }
 
 
-  // const unsplashConfig = {
-  //   headers: {
-  //     'Authorization': `Client-ID ${import.meta.env.VITE_UNSPLASH_API_KEY}`,
-  //   },
-  //   params: {
-  //     query: query,
-  //     per_page: 15,
-  //     page
-  //   }
-
-  // };
-
-  // useEffect(() => {
-  //   let ignore = false;
-  //   handleUnsplashImageSearch();
-
-  //   return () => {
-  //     ignore = true;
-  //   };
-  // }, [page])
-
-
-    const handleUnsplashImageSearch = async () => {
+    const handlePexelsImageSearch = async () => {
       try {
         const response = await axios.get(
-          'https://api.pexels.com/v1/search',
+          'https://api.pexels.com/v1/search', 
           pexelsConfig
         )
         setPexelsPhotos((prevPexelPhotos) => [...prevPexelPhotos, ...response.data.photos]) 
@@ -123,13 +115,9 @@ function Header() {
       }
     }
   
-  useEffect(() => {
-    handleUnsplashImageSearch();
-  }, [page])
-
   const handleNext = () => {
       setPage(page + 1)
-      // setCounter(counter + 1)
+      handlePexelsImageSearch();
     
   }
 
@@ -138,7 +126,7 @@ function Header() {
           setPage(0);
           event.preventDefault();
           setPhotos([])
-          handleUnsplashImageSearch();
+          handlePexelsImageSearch();
           setCounter(counter + 1)
       };
     }
@@ -150,21 +138,43 @@ function Header() {
     params: {
       query: query,
       per_page: 40,
-      page: page
+      page: page 
     }
   }
   
   const fetchBoards = async () => {
-    const response = await fetch('http://localhost:3000/api/getboards', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    const data = await response.json();
-    console.log('Fetched data:', data); 
-    setBoards(data.boards); 
+
+    const user = auth.currentUser;
+			if (!user) {
+				console.error("No user is authenticated.");
+				return;
+			}
+
+			try {
+				const idToken = await user.getIdToken();
+				const userId = user.uid;
+				console.log(userId);
+				const response = await fetch(`http://localhost:3000/api/getboards/${userId}`, {
+					method: "GET",
+					headers: {
+						"Authorization": `Bearer ${idToken}`,
+						"Content-Type": "application/json",
+					},
+				});
+
+				if (!response.ok) {
+					throw new Error("Failed to fetch vision boards");
+				}
+
+				const data = await response.json();
+				setBoards(data.boards);
+        console.log(boards.title);
+			} catch (error) {
+				console.error("Error fetching boards:", error);
+			}
   }
+
+  
 
   const handleImageSelect = async (image) => {
     fetchBoards();
@@ -219,7 +229,7 @@ function Header() {
       <>
       <div
         style={{
-          backgroundColor: "#F7F7F5",
+          backgroundColor: "#FFFFFF",
           width: "100%",
           padding: "10px",
           boxSizing: "border-box",
@@ -229,7 +239,6 @@ function Header() {
           left: "0",
           display: "flex",
           flexDirection: "column",
-          height: "95px",
         }}
       >
         {/* Header Section */}
@@ -288,6 +297,24 @@ function Header() {
           >
             Vision Boards
           </Button>
+
+          <Button
+            variant="text"
+            style={{
+              marginLeft: "25px",
+              fontFamily: "Lausanne",
+              fontWeight: "bolder",
+              fontSize: "18px",
+              color: isImageGeneratorClicked ? "#FFFFFF" : "#000000",
+              backgroundColor: isImageGeneratorClicked ? "#000000" : "transparent",
+              borderRadius: isImageGeneratorClicked ? "20px" : "none",
+            }}
+            onClick={handleImageGeneratorClick}
+          >
+            AI Image Generator 
+          </Button>
+
+         
 
           <Box sx={{ width: 800, maxWidth: "100%", marginLeft: "33px" }}>
             <TextField
@@ -382,39 +409,13 @@ function Header() {
             
           }}
         >
-          {photos && photos.map((photo) => (
-            <div
-              key={photo.id}
-              onClick={() => {
-                handleOpen();
-                handleImageSelect();
-              }}
-              style={{
-                width: "100%",
-                borderRadius: "10px",
-                overflow: "hidden",
-                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-              }}
-            >
-              <img
-                src={photo.urls.raw}
-                alt={photo.alt_description}
-                style={{
-                  width: "100%",
-                  height: "200px",
-                  objectFit: "cover",
-                  borderRadius: "10px",
-                }}
-              />
-            </div>
-          ))}
 
       {pexelsPhotos.map((photo, index) => (
             <div
               key={photo.id || index}
               onClick={() => {
                 handleOpen();
-                handleImageSelect(photo.src.original);
+                handleImageSelect(photo.src.medium);
               }}
               style={{
                 width: "100%",
@@ -424,7 +425,7 @@ function Header() {
               }}
             >
               <img
-                src={photo.src.original}
+                src={photo.src.medium}
                 alt={photo.alt}
                 style={{
                   width: "100%",
@@ -434,7 +435,7 @@ function Header() {
                 }}
               />
             </div>
-          ))}  
+      ))}  
           
         </div>
 
