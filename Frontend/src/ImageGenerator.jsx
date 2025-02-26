@@ -32,13 +32,13 @@ function ImageGenerator () {
     }
 
     // Configure AWS S3 Client 
-    const s3 = new S3Client({
-        region: "us-west-1",
-        credentials: {
-            accesKeyId: 'AKIA5FTZD6V3VYJGUSYT',
-            secretAccessKey: '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'
-        }
-      })
+    // const s3 = new S3Client({
+    //     region: "us-west-1",
+    //     credentials: {
+    //         accesKeyId: 'AKIA5FTZD6V3VYJGUSYT',
+    //         secretAccessKey: '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'
+    //     }
+    //   })
 
     const uploadToS3 = async (imageBuffer, fileName, mimeType) => {
         try {
