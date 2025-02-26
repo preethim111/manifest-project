@@ -31,33 +31,26 @@ function ImageGenerator () {
         setSnackBarOpen(false);
     }
 
-    // Configure AWS S3 Client 
-    // const s3 = new S3Client({
-    //     region: "us-west-1",
-    //     credentials: {
-    //         accesKeyId: 'AKIA5FTZD6V3VYJGUSYT',
-    //         secretAccessKey: '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'
-    //     }
-    //   })
+ 
 
-    const uploadToS3 = async (imageBuffer, fileName, mimeType) => {
-        try {
-            const S3Params = {
-                Bucket: 'manifestimagesai',
-                Key: `generated-images/${selectedBoard}/${fileName}.png`, 
-                Body: imageBuffer,
-                ContentType: mimeType,
-                ACL: "public-read", // Ensures the file is accessible via URL
-            }
+    // const uploadToS3 = async (imageBuffer, fileName, mimeType) => {
+    //     try {
+    //         const S3Params = {
+    //             Bucket: 'manifestimagesai',
+    //             Key: `generated-images/${selectedBoard}/${fileName}.png`, 
+    //             Body: imageBuffer,
+    //             ContentType: mimeType,
+    //             ACL: "public-read", // Ensures the file is accessible via URL
+    //         }
             
-            await s3.send(new PutObjectCommand(S3Params));
+    //         await s3.send(new PutObjectCommand(S3Params));
 
-            return `https://manifestimagesai.s3.us-west-1.amazonaws.com/${s3Params.Key}`;
-        } catch (error) {
-            console.error("Error uploading image to S3:", error);
-            throw error;
-        }
-    }
+    //         return `https://manifestimagesai.s3.us-west-1.amazonaws.com/${s3Params.Key}`;
+    //     } catch (error) {
+    //         console.error("Error uploading image to S3:", error);
+    //         throw error;
+    //     }
+    // }
 
 
     const generateImage = async () => {
@@ -81,13 +74,13 @@ function ImageGenerator () {
             console.log(imageUrl)
 
 
-            const imageResponse = await fetch(data.data[0].url);
-            const imageBlob = await imageResponse.blob();
-            const mimeType = imageBlob.type;  // Get the MIME type dynamically
-            const imageBuffer = await imageBlob.arrayBuffer();  // Convert to buffer
-            const fileName = `image-${Date.now()}`; // Generate a unique file name
-            const s3ImageUrl = await uploadToS3(imageBuffer, fileName, mimeType);
-            console.log("Uploaded to S3:", s3ImageUrl);
+            // const imageResponse = await fetch(data.data[0].url);
+            // const imageBlob = await imageResponse.blob();
+            // const mimeType = imageBlob.type;  // Get the MIME type dynamically
+            // const imageBuffer = await imageBlob.arrayBuffer();  // Convert to buffer
+            // const fileName = `image-${Date.now()}`; // Generate a unique file name
+            // const s3ImageUrl = await uploadToS3(imageBuffer, fileName, mimeType);
+            // console.log("Uploaded to S3:", s3ImageUrl);
 
 
             setLoading(false);
