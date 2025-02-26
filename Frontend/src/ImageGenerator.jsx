@@ -31,6 +31,9 @@ function ImageGenerator () {
         setSnackBarOpen(false);
     }
 
+    const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+
+
  
 
    
@@ -42,7 +45,7 @@ function ImageGenerator () {
             const response = await fetch("https://api.openai.com/v1/images/generations", {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer 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`, // Replace with your actual API key
+                    'Authorization': `Bearer ${API_KEY}`, // Replace with your actual API key
                     'Content-type': 'application/json'
                 },
                 body: JSON.stringify({
