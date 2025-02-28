@@ -9,7 +9,6 @@ import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
 import { auth } from "./firebase";
 import { Snackbar, Alert } from "@mui/material"; 
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
 
 
