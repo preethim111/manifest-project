@@ -32,6 +32,7 @@ function ImageGenerator () {
 
     const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 
  
 
@@ -44,7 +45,7 @@ function ImageGenerator () {
             const response = await fetch("https://api.openai.com/v1/images/generations", {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${API_KEY}`, // Replace with your actual API key
+                    'Authorization': `Bearer ${API_KEY}`,
                     'Content-type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -59,7 +60,7 @@ function ImageGenerator () {
             console.log(imageUrl)
 
 
-
+            console.log("Backend URL:", import.meta.env.VITE_BACKEND_URL);
 
             setLoading(false);
         } catch (error) {
@@ -81,7 +82,7 @@ function ImageGenerator () {
                     const idToken = await user.getIdToken();
                     const userId = user.uid;
                     console.log(userId);
-                    const response = await fetch(`http://localhost:3000/api/getboards/${userId}`, {
+                    const response = await fetch(`${BACKEND_URL}/api/getboards/${userId}`, {
                         method: "GET",
                         headers: {
                             "Authorization": `Bearer ${idToken}`,
@@ -113,7 +114,7 @@ function ImageGenerator () {
 
       const handleModalSelect = async () => {
         try {
-          const response = await fetch('http://localhost:3000/api/populateVisionBoardAI', {
+          const response = await fetch(`${BACKEND_URL}/api/populateVisionBoardAI`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

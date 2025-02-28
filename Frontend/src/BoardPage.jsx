@@ -12,10 +12,13 @@ function BoardPage() {
     const [images, setImages] = useState([]);
     const navigate = useNavigate();
 
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
+
+
     useEffect(() => {
         const fetchImages = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/api/getImages/${title}`, {
+                const response = await fetch(`${BACKEND_URL}/api/getImages/${title}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'

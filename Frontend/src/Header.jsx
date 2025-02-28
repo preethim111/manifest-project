@@ -42,6 +42,8 @@ function Header() {
   const handleOpen = () => setOpen(true);
   const handleClose2 = () => setOpen(false);
   
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
+
 
   // Context values
   const {
@@ -154,7 +156,7 @@ function Header() {
 				const idToken = await user.getIdToken();
 				const userId = user.uid;
 				console.log(userId);
-				const response = await fetch(`http://localhost:3000/api/getboards/${userId}`, {
+				const response = await fetch(`${BACKEND_URL}/api/getboards/${userId}`, {
 					method: "GET",
 					headers: {
 						"Authorization": `Bearer ${idToken}`,
@@ -187,7 +189,7 @@ function Header() {
 
   const handleModalSelect = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/populateVisionBoard', {
+      const response = await fetch(`${BACKEND_URL}/api/populateVisionBoard`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -205,6 +207,8 @@ function Header() {
   
       const result = await response.json();
       console.log('Response from server:', result);
+      
+
     } catch (error) {
       console.error('Error in handleModalSelect:', error);
     }

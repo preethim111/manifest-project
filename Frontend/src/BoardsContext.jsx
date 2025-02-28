@@ -5,13 +5,16 @@ export const BoardsContext = createContext();
 export const BoardsProvider = ({ children }) => {
     const [boards, setBoards] = useState([]);
 
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
+
+
     const addBoard = (board) => {
         setBoards((prevBoards) => [...prevBoards, board])
     }
 
     useEffect(() => {
         const fetchBoards = async () => {
-          const response = await fetch('http://localhost:3000/api/getboards', {
+          const response = await fetch(`${BACKEND_URL}/api/getboards`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'

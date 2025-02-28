@@ -23,6 +23,8 @@ function CreateBoard() {
 	const { previewImage } = useImageContext();
 	const [thumbnail, setThumbnail] = useState(null);
 	// const [isClicked, setIsClicked] = useState(false)
+	
+	const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 
 	const handleCreateClick = async () => {
 		if (!title) {
@@ -55,7 +57,7 @@ function CreateBoard() {
 			formData.append("uploadedPreviewImage", file);
 			formData.append("userId", userId);
 
-			const response = await fetch("http://localhost:3000/api/visionBoard", {
+			const response = await fetch(`${BACKEND_URL}/api/visionBoard`, {
 				method: "POST",
 				headers: {
 					Authorization: `Bearer ${idToken}`, // Pass the ID token

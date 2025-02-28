@@ -11,6 +11,9 @@ function ResetPassword() {
     const [newPassword, setNewPassword] = useState('')
     const [oobCode, setOobCode] = useState('')
     const navigate = useNavigate()
+    
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
+
 
     // useEffect(() => {
     //     const urlParams = new URLSearchParams(window.location.search)
@@ -37,7 +40,7 @@ function ResetPassword() {
 
 
             // Step 2: Update new password in MongoDB
-            const response = await fetch('http://localhost:3000/api/reset', {
+            const response = await fetch(`${BACKEND_URL}/api/reset`, {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'

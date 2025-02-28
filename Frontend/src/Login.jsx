@@ -14,10 +14,13 @@ function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
+
+
 
     const checkEmailPasswordInDatabase = async (email, password) => {
       try {
-        const response = await fetch('http://localhost:3000/api/authenticate', {
+        const response = await fetch(`${BACKEND_URL}/api/authenticate`, {
           method: 'POST',
           headers: {
             'Content-type': 'application/json'

@@ -15,6 +15,9 @@ function CreateAccount() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
+
+
   const handleSignUp = async () => {
     if (!email || !password || !fullName) {
       setError("All fields are required")
@@ -41,7 +44,7 @@ function CreateAccount() {
 
 
       // Send user data to the backend
-      const response = await fetch('http://localhost:3000/api/signup', {
+      const response = await fetch(`${BACKEND_URL}/api/signup`, {
         method: 'POST',
         headers: {
           'Content-type': 'application/json'

@@ -5,11 +5,12 @@ import Header from "./src/Header";
 function AiImages() {
     const [aiImages, setAiImages] = useState([]);
     const { title } = useParams();
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 
     useEffect(() => {
         const fetchAiImages = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/api/getAiImages/${title}`, {
+                const response = await fetch(`${BACKEND_URL}/api/getAiImages/${title}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
