@@ -16,7 +16,7 @@ const app = express();
 
 app.use(
 	cors({
-		origin: "http://localhost:5173", // Allow requests from your frontend's origin
+		origin: ["http://localhost:5173", "https://manifest-project.vercel.app"], // Allow requests from your frontend's origin
 		methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed HTTP methods
 		allowedHeaders: ["Content-Type", "Authorization"], // Specify allowed headers
 	})
