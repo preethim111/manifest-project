@@ -79,7 +79,7 @@ function Login() {
 
         <>
        <div style={{ fontSize: '2.5rem', fontFamily: 'Lausanne', color: '#000000', marginBottom: '20px', fontWeight: 'bold', display: 'flex', justifyContent: 'flex-start'}}>
-        Welcome!
+        Login
       </div>
       <Box
       component="form"

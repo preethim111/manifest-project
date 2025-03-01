@@ -6,6 +6,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import GoogleIcon from './assets/icons/google.png';
 import { auth, createUserWithEmailAndPassword, updateProfile } from './firebase';
+import { useNavigate } from "react-router-dom";
 
 
 function CreateAccount() {
@@ -14,6 +15,7 @@ function CreateAccount() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 
@@ -55,6 +57,8 @@ function CreateAccount() {
       if (!response.ok) {
         throw new Error(responseData.error || 'Failed to save user data to the backend');
       }
+
+      navigate('/');
 
       console.log(responseData);
       console.log('User created:', userData)
