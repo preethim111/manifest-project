@@ -109,7 +109,8 @@ useEffect(() => {
 								<CardMedia
 									component="img"
 									height="140"
-									src={`http://localhost:3000${board.previewImage}`}
+									// src={`http://localhost:3000${board.previewImage}`}
+									src={board.previewImage}
 									alt="Preview Image"
 								/>
 								<CardContent>

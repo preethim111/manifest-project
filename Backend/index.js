@@ -10,6 +10,11 @@ import multer from "multer";
 import mongoose from 'mongoose';
 import { logger, requestLogger } from "./logger.js"; 
 import admin from "firebase-admin";
+import AWS from "aws-sdk";
+import multerS3 from "multer-s3";
+import { S3Client } from '@aws-sdk/client-s3';
+
+
 
 
 const app = express();
@@ -32,17 +37,17 @@ connectDB();
 app.use(express.json());
 
 // Update this to include the full URL path when serving static files
-app.use("/uploads", express.static("uploads"));
+// app.use("/uploads", express.static("uploads"));
 
 // Configure multer middleware for handling file uploads
-const storage = multer.diskStorage({
-	destination: function (req, file, cb) {
-		cb(null, "./uploads/");
-	},
-	filename: function (req, file, cb) {
-		cb(null, Date.now() + "-" + file.originalname);
-	},
-});
+// const storage = multer.diskStorage({
+// 	destination: function (req, file, cb) {
+// 		cb(null, "./uploads/");
+// 	},
+// 	filename: function (req, file, cb) {
+// 		cb(null, Date.now() + "-" + file.originalname);
+// 	},
+// });
 
 app.use(requestLogger);
 
@@ -62,7 +67,30 @@ app.use((req, res, next) => {
   });
 
 
-const upload = multer({ storage: storage });
+// const upload = multer({ storage: storage });
+
+
+const s3 = new S3Client({
+	region: process.env.AWS_REGION,
+	credentials: {
+	  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+	  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+	},
+  });
+  
+  // Configure Multer to Upload to S3
+  const upload = multer({
+	storage: multerS3({
+	  s3,
+	  bucket: process.env.S3_BUCKET_NAME,
+	//   acl: 'public-read',
+	  contentType: multerS3.AUTO_CONTENT_TYPE,
+	  key: function (req, file, cb) {
+		const filename = `vision-boards/${Date.now()}-${file.originalname}`;
+		cb(null, filename);
+	  },
+	}),
+  });
 
 
 admin.initializeApp({
@@ -129,14 +157,16 @@ app.post("/api/reset", async (req, res) => {
 	}
 });
 
-// POST: Endpoint to save the vision boards (not pictures, just the boards)
+// POST: Endpoint to save the vision boards
 app.post(
 	"/api/visionBoard",
 	upload.single("uploadedPreviewImage"),
 	async (req, res) => {
+		console.log(req.file);
 		const { title, description, userId } = req.body;
 		// Create the full URL path for the image
-		const previewImage = req.file ? `/uploads/${req.file.filename}` : null;
+		// const previewImage = req.file ? `/uploads/${req.file.filename}` : null;
+		const previewImage = req.file ? req.file.location : null; // Store S3 URL
 		try {
 
 			const board = new Board({
@@ -152,7 +182,7 @@ app.post(
 				message: "Board created successfully!",
 				board,
 			});
-		} catch (error) {
+		} catch (error) {	
 			console.error(error);
 			res.status(500).json({ message: "Error creating the board" });
 		}
