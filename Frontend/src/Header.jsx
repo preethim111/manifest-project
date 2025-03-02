@@ -207,7 +207,7 @@ function Header() {
   
       const result = await response.json();
       console.log('Response from server:', result);
-      
+      handleClose2();
 
     } catch (error) {
       console.error('Error in handleModalSelect:', error);

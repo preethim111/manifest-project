@@ -41,6 +41,11 @@ function AiImages() {
     return (
         <div style={{ width: "100%", padding: "20px" }}>
             <Header />
+            <div style={{ color: "black", fontFamily: "Lausanne" }}>
+                <h1>
+                    AI Images
+                </h1>
+            </div>
             <div 
                 style={{ 
                     display: "flex", 
@@ -74,6 +79,3 @@ function AiImages() {
 }
 
 export default AiImages;
-
-
-
