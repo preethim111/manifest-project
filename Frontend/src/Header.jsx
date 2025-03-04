@@ -127,8 +127,10 @@ function Header() {
         if (event.key === "Enter") {
           setPage(0);
           event.preventDefault();
-          setPhotos([])
+          setPexelsPhotos([])
+          setQuery(event.target.value)
           handlePexelsImageSearch();
+          console.log(pexelsPhotos)
           setCounter(counter + 1)
       };
     }
