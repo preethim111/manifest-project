@@ -43,10 +43,6 @@ function BoardPage() {
 
 
     const handleCopyLink = () => {
-        // const url = window.location.href;
-        // navigator.clipboard.writeText(url);
-        // alert("Board link copied!");
-
         const url = `${window.location.origin}/${title}`;
         navigator.clipboard.writeText(url);
         alert("Board link copied!");
