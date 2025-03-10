@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Header from './Header';
 import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 
 function BoardPage() {
@@ -40,30 +41,65 @@ function BoardPage() {
         
     }, [title]);
 
+
+    const handleCopyLink = () => {
+        // const url = window.location.href;
+        // navigator.clipboard.writeText(url);
+        // alert("Board link copied!");
+
+        const url = `${window.location.origin}/${title}`;
+        navigator.clipboard.writeText(url);
+        alert("Board link copied!");
+      };
+
     return (
         <div style={{ color: "black", fontFamily: "Lausanne" }}>
             <Header />
+
+            
+        
             <h1>{title}</h1> 
+            
+           
+
 
             <Button variant="contained" sx={{ 
-        marginBottom: "25px", 
+        marginBottom: "30px",
+        marginRight: "10px", 
         padding: "12px 24px",
         fontSize: "18px",
         backgroundColor: "black", 
+        justifyContent: "flex-start", 
         color: "white", 
+        alignItems: "flex-start",
         borderRadius: "30px",
         "&:hover": {
-            backgroundColor: "#333", // Slightly lighter black on hover
+            backgroundColor: "#333",
         },
         "&:active": {
-            transform: "scale(0.95) translateY(2px)", // Press-down effect
-            boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)", // Adjusted shadow for depth effect
+            transform: "scale(0.95) translateY(2px)", 
+            boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.2)", 
         }
 
     }}
     onClick={() => navigate(`/ai-images/${title}`)}
     >
                 AI Images
+            </Button>
+    
+            <Button
+                    onClick={handleCopyLink}
+                    style={{
+                    marginBottom: "30px",
+                    padding: "10px 20px", // Adjust padding to make the button bigger
+                    borderRadius: "30px", // Makes the button rounded
+                    border: "none", // Optional: Removes border
+                    color: "white", // Text color (white in this case)
+                    cursor: "pointer", // Change cursor on hover
+                    backgroundColor: "#303030"
+                    }}
+                >
+                    <ContentCopyIcon />
             </Button>
 
             <div 

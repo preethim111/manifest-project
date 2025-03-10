@@ -3,6 +3,8 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  --background-color: #FFFFFF; /* Default to light theme (white) */
+
 }
 
 .logo {
@@ -48,6 +50,7 @@ body {
 }
 
 
+
 @font-face {
   font-family: 'Lausanne';
   src: url('./assets/fonts/TWKLausanne-50.ttf') format('truetype');
@@ -62,5 +65,4 @@ body {
   font-weight: bold;
   font-style: normal;
 }
-
 

@@ -17,7 +17,6 @@ import { auth } from "./firebase";
 
 
 
-
 function Header() {
 
   //accept the query variable here
@@ -38,6 +37,7 @@ function Header() {
   const [selectedBoard, setSelectedBoard] = useState('');
   const [selectedImage, setSelectedImage] = useState([]);
   
+  const [theme, setTheme] = useState('light'); 
 
   const handleOpen = () => setOpen(true);
   const handleClose2 = () => setOpen(false);
@@ -119,9 +119,13 @@ function Header() {
   
   const handleNext = () => {
       setPage(page + 1)
-      handlePexelsImageSearch();
-    
   }
+
+  useEffect(() => {
+    handlePexelsImageSearch();
+  }, [page]);
+
+
 
     const handleKeyDown = (event) => {
         if (event.key === "Enter") {
@@ -129,7 +133,6 @@ function Header() {
           event.preventDefault();
           setPexelsPhotos([])
           setQuery(event.target.value)
-          handlePexelsImageSearch();
           console.log(pexelsPhotos)
           setCounter(counter + 1)
       };
@@ -229,6 +232,7 @@ function Header() {
     boxShadow: 24,
     p: 4,
   };
+
 
       
     return (
@@ -370,6 +374,8 @@ function Header() {
           >
             <KeyboardArrowDownIcon style={{ color: "black" }} />
           </button>
+        
+ 
           <Menu
             open={isOpen}
             onClose={handleClose}
@@ -496,6 +502,8 @@ function Header() {
               ))}
             </div>
             </div>
+
+           
 
           </Box>
       </Modal>
