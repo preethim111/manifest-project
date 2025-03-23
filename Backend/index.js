@@ -23,13 +23,16 @@ app.use(
 	cors({
 		origin: ["http://localhost:5173", "https://manifest-project.vercel.app"], // Allow requests from your frontend's origin
 		methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed HTTP methods
-		allowedHeaders: ["Content-Type", "Authorization"], // Specify allowed headers
+		allowedHeaders: ["Content-Type", "Authorization", "Body"], // Specify allowed headers
 	})
 );
+app.options('*', cors());
 
-app.use(express.json({ limit: "10mb" })); // Adjust the limit as needed
+
+app.use(express.json()); // Adjust the limit as needed
 
 dotenv.config();
+
 
 connectDB();
 
@@ -335,7 +338,7 @@ app.delete("/api/deleteImage/:title", async (req, res) => {
 		await board.save();
 	} catch (error) {
 		console.error("Error deleting image:", error);
-		
+
 	}
 })
 
