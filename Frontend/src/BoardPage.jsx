@@ -5,6 +5,7 @@ import Header from './Header';
 import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 function BoardPage() {
@@ -39,7 +40,7 @@ function BoardPage() {
         };
         fetchImages();
         
-    }, [title]);
+    }, [title, images]);
 
 
     const handleCopyLink = () => {
@@ -47,6 +48,28 @@ function BoardPage() {
         navigator.clipboard.writeText(url);
         alert("Board link copied!");
       };
+
+    
+    const handleDeleteImage = async (imageUrl) => {
+        try {
+            const response = await fetch(`${BACKEND_URL}/api/deleteImage/${title}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({ imageUrl })
+            })
+            if (!response.ok) {
+                throw new Error(`Error deleting image: ${response.statusText}`);
+            }
+
+            setImages(images.filter((image) => image !== imageUrl));
+
+
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     return (
         <div style={{ color: "black", fontFamily: "Lausanne" }}>
@@ -129,6 +152,26 @@ function BoardPage() {
                                 e.currentTarget.style.transform = "scale(1)";
                             }}
                         >
+                            <button
+                                onClick={() => handleDeleteImage(image)}
+                                style={{
+                                    position: "absolute",
+                                    top: "10px",
+                                    right: "10px",
+                                    backgroundColor: "rgba(0, 0, 0, 0.5)",
+                                    color: "white",
+                                    border: "none",
+                                    borderRadius: "50%",
+                                    width: "30px",
+                                    height: "30px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                <CloseIcon fontSize="small" />
+                            </button>
                             <img 
                                 src={image} 
                                 alt={`Board image ${index + 1}`} 

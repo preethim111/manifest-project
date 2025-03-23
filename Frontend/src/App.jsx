@@ -29,7 +29,6 @@ function App() {
             <Route path="/home-page" element={<HomePage />} />
             <Route path="/create-board" element={<CreateBoard/>} />
             <Route path="/:title" element={<BoardPage />} />
-            {/* <Route path="/forgot-password" element={<ForgotPassword />}/> */}
             <Route path="/reset-password" element={<ResetPassword />}/>
             <Route path="/all-boards" element={<AllBoards />} />
             <Route path="/ai-image-generator" element={<ImageGenerator />} />

@@ -324,6 +324,21 @@ app.get("/api/getAiImages/:title", async(req, res) => {
 })
 
 
+app.delete("/api/deleteImage/:title", async (req, res) => {
+	const { title } = req.params;
+	const { imageUrl } = req.body;
+
+	try {
+		const board = await Board.findOne({ title });
+
+		board.images = board.images.filter((img) => img !== imageUrl);
+		await board.save();
+	} catch (error) {
+		console.error("Error deleting image:", error);
+		
+	}
+})
+
 
 const PORT = process.env.PORT || 3000;
 
