@@ -1,9 +1,9 @@
 # manifest-project
 
 Tech Stack:
- Frontend: Vite + React 
- Backend: Node.js, Express
- Database: MongoDB
+1) Frontend: Vite + React 
+2) Backend: Node.js, Express
+3) Database: MongoDB
 
 Features To Explore:
 1) Authentication (using Firebase)
