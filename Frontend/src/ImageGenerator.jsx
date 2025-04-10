@@ -9,8 +9,7 @@ import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
 import { auth } from "./firebase";
 import { Snackbar, Alert } from "@mui/material"; 
-
-
+import AudioRecorder from './AudioRecorder';
 
 function ImageGenerator () {
     const [imageUrl, setImageUrl] = useState('');
@@ -34,10 +33,9 @@ function ImageGenerator () {
 
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL
 
- 
-
-   
-
+    const handleTranscriptionReceived = (transcription) => {
+        setPrompt(transcription);
+    };
 
     const generateImage = async () => {
         setLoading(true);
@@ -172,7 +170,16 @@ function ImageGenerator () {
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                 backgroundColor: 'white'
             }}>
+                <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                    Voice Prompt
+                </Typography>
+                <AudioRecorder onTranscriptionReceived={handleTranscriptionReceived} />
+                
+                <Typography variant="h6" sx={{ marginTop: 2, marginBottom: 2 }}>
+                    Text Prompt
+                </Typography>
                 <TextField
+                    value={prompt}
                     onChange={(e) => setPrompt(e.target.value)}
                     fullWidth
                     label="Type your prompt"

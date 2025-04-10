@@ -14,9 +14,6 @@ import AWS from "aws-sdk";
 import multerS3 from "multer-s3";
 import { S3Client } from '@aws-sdk/client-s3';
 
-
-
-
 const app = express();
 
 app.use(
@@ -28,11 +25,9 @@ app.use(
 );
 app.options('*', cors());
 
-
 app.use(express.json()); // Adjust the limit as needed
 
 dotenv.config();
-
 
 connectDB();
 
@@ -69,9 +64,7 @@ app.use((req, res, next) => {
 	res.status(500).send("Something went wrong!");
   });
 
-
 // const upload = multer({ storage: storage });
-
 
 const s3 = new S3Client({
 	region: process.env.AWS_REGION,
@@ -95,11 +88,9 @@ const s3 = new S3Client({
 	}),
   });
 
-
 admin.initializeApp({
 	credential: admin.credential.applicationDefault(),  // Use applicationDefault() for local dev credentials
   });
-
 
 // POST: Endpoint to authenticate user during sign-in
 app.post("/api/authenticate", async (req, res) => {
@@ -216,8 +207,6 @@ app.get("/api/getboards/:userId", async (req, res) => {
     }
 });
 
-
-
 // GET: Get specific board based on title
 app.get("/api/getSpecificBoard", async(req, res) => {
 	const { title } = req.body;
@@ -227,8 +216,6 @@ app.get("/api/getSpecificBoard", async(req, res) => {
 		res.status(500).send({ error: error.message });
 	}
 })
-
-
 
 // POST: Post images to specific board
 app.post("/api/populateVisionBoard", async(req, res) => {
@@ -282,7 +269,6 @@ app.get("/api/getImages/:title", async(req, res) => {
 	}
 })
 
-
 // POST: Post AI images to specific board
 app.post("/api/populateVisionBoardAI", async(req, res) => {
 	const {title, imagesAI} = req.body;
@@ -307,7 +293,6 @@ app.post("/api/populateVisionBoardAI", async(req, res) => {
 	}
 })
 
-
 // GET: Get AI images of specific board 
 app.get("/api/getAiImages/:title", async(req, res) => {
 	try {
@@ -326,7 +311,6 @@ app.get("/api/getAiImages/:title", async(req, res) => {
 	}
 })
 
-
 app.delete("/api/deleteImage/:title", async (req, res) => {
 	const { title } = req.params;
 	const { imageUrl } = req.body;
@@ -341,7 +325,6 @@ app.delete("/api/deleteImage/:title", async (req, res) => {
 
 	}
 })
-
 
 const PORT = process.env.PORT || 3000;
 
