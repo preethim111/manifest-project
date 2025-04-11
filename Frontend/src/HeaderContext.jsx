@@ -7,6 +7,7 @@ const HeaderProvider = ({ children }) => {
   const [isCreateClicked, setIsCreateClicked] = useState(false);
   const [isVisionBoardsClicked, setIsVisionBoardsClicked] = useState(false);
   const [isImageGeneratorClicked, setIsImageGeneratorClicked] = useState(false);
+  const [isAffirmationsClicked, setIsAffirmationsClicked] = useState(false);
   
   return (  
    <HeaderContext.Provider value={{  
@@ -17,7 +18,9 @@ const HeaderProvider = ({ children }) => {
     isVisionBoardsClicked,
     setIsVisionBoardsClicked,
     isImageGeneratorClicked,
-    setIsImageGeneratorClicked
+    setIsImageGeneratorClicked,
+    isAffirmationsClicked,
+    setIsAffirmationsClicked
    }}>  
     {children}  
    </HeaderContext.Provider>  

@@ -14,6 +14,7 @@ import { ImageProvider } from './ImageContext';
 import { BoardsProvider } from './BoardsContext';
 import ImageGenerator from './ImageGenerator';
 import AiImages from '../AiImages';
+import Affirmations from './pages/Affirmations';
 
 
 
@@ -33,6 +34,7 @@ function App() {
             <Route path="/all-boards" element={<AllBoards />} />
             <Route path="/ai-image-generator" element={<ImageGenerator />} />
             <Route path="/ai-images/:title" element={<AiImages />}/>
+            <Route path="/affirmations" element={<Affirmations />}/>
           </Routes>
         </ImageProvider>
       </BoardsProvider>

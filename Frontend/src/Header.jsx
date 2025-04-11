@@ -54,7 +54,9 @@ function Header() {
     isVisionBoardsClicked,
     setIsVisionBoardsClicked,
     isImageGeneratorClicked,
-    setIsImageGeneratorClicked
+    setIsImageGeneratorClicked,
+    isAffirmationsClicked,
+    setIsAffirmationsClicked
   } = useContext(HeaderContext);
 
   // Handlers
@@ -63,6 +65,7 @@ function Header() {
     setIsCreateClicked(false);
     setIsVisionBoardsClicked(false);
     setIsImageGeneratorClicked(false);
+    setIsAffirmationsClicked(false);
     navigate("/home-page");
   };
 
@@ -71,6 +74,7 @@ function Header() {
     setIsHomeClicked(false);
     setIsVisionBoardsClicked(false);
     setIsImageGeneratorClicked(false);
+    setIsAffirmationsClicked(false);
     navigate("/create-board");
   };
 
@@ -79,7 +83,17 @@ function Header() {
     setIsCreateClicked(false);
     setIsHomeClicked(false);
     setIsImageGeneratorClicked(false);
+    setIsAffirmationsClicked(false);
     navigate("/all-boards")
+  }
+
+  const handleAffirmationsClick = () => {
+    setIsAffirmationsClicked(true);
+    setIsCreateClicked(false);
+    setIsHomeClicked(false);
+    setIsVisionBoardsClicked(false);
+    setIsImageGeneratorClicked(false);
+    navigate("/affirmations") 
   }
 
   const toggleDropdown = (event) => {
@@ -97,6 +111,7 @@ function Header() {
     setIsCreateClicked(false);
     setIsHomeClicked(false);
     setIsVisionBoardsClicked(false);
+    setIsAffirmationsClicked(false);
     navigate("/ai-image-generator")
 
   }
@@ -324,7 +339,21 @@ function Header() {
             AI Image Generator 
           </Button>
 
-         
+         <Button
+          variant="text"
+          style={{
+            marginLeft: "25px",
+            fontFamily: "Lausanne",
+            fontWeight: "bolder",
+            fontSize: "18px",
+            color: isAffirmationsClicked ? "#FFFFFF" : "#000000",
+            backgroundColor: isAffirmationsClicked ? "#000000" : "transparent",
+            borderRadius: isAffirmationsClicked ? "20px" : "none",
+          }}
+          onClick={handleAffirmationsClick}
+         >
+          Affirmations
+         </Button>
 
           <Box sx={{ width: 800, maxWidth: "100%", marginLeft: "33px" }}>
             <TextField

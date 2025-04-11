@@ -13,6 +13,7 @@ import admin from "firebase-admin";
 import AWS from "aws-sdk";
 import multerS3 from "multer-s3";
 import { S3Client } from '@aws-sdk/client-s3';
+import affirmationsRouter from './routes/affirmations.js';
 
 const app = express();
 
@@ -325,6 +326,8 @@ app.delete("/api/deleteImage/:title", async (req, res) => {
 
 	}
 })
+
+app.use('/api/affirmations', affirmationsRouter);
 
 const PORT = process.env.PORT || 3000;
 
